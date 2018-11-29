@@ -34,6 +34,9 @@ export default class SignInScreen extends React.Component {
           'light': require('../../assets/fonts/Montserrat-Light.ttf'),
           'bold': require('../../assets/fonts/Montserrat-Bold.ttf'),
           'FontAwesome': require('../../assets/fonts/FontAwesome.ttf'),
+          'Material Icons': require('../../assets/fonts/MaterialCommunityIcons.ttf'),
+          'Material Design Icons': require('../../assets/fonts/MaterialCommunityIcons.ttf'),
+          'Ionicons': require('../../assets/fonts/Ionicons.ttf'),
         });
     
         this.setState({ fontLoaded: true });

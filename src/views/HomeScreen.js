@@ -66,29 +66,26 @@ function cacheImages(images) {
   });
 }
 
-function cacheFonts(fonts) {
-  return fonts.map(font => Font.loadAsync(font));
-}
 export default class HomeScreen extends React.Component {
-     state = {
+  state = {
     isReady: false,
   };
 
   async _loadAssetsAsync() {
-    const imageAssets = cacheImages([
-     /* require('./assets/images/bg_screen1.jpg'),
-      require('./assets/images/bg_screen2.jpg'),
-      require('./assets/images/bg_screen3.jpg'),
-      require('./assets/images/bg_screen4.jpg'),
-      require('./assets/images/user-cool.png'),
-      require('./assets/images/user-hp.png'),
-      require('./assets/images/user-student.png'),
-      require('./assets/images/avatar1.jpg'),*/
-    ]);
-
-    const fontAssets = cacheFonts([FontAwesome.font, Ionicons.font]);
-
-    await Promise.all([...imageAssets, ...fontAssets]);
+    
+    await Font.loadAsync({
+        'georgia': require('../../assets/fonts/Georgia.ttf'),
+        'regular': require('../../assets/fonts/Montserrat-Regular.ttf'),
+        'light': require('../../assets/fonts/Montserrat-Light.ttf'),
+        'bold': require('../../assets/fonts/Montserrat-Bold.ttf'),
+        'FontAwesome': require('../../assets/fonts/FontAwesome.ttf'),
+        'Material Icons': require('../../assets/fonts/MaterialCommunityIcons.ttf'),
+        'Material Design Icons': require('../../assets/fonts/MaterialCommunityIcons.ttf'),
+        'Ionicons': require('../../assets/fonts/Ionicons.ttf'),
+        'Entypo': require('../../assets/fonts/Entypo.ttf'),
+      });
+  
+      this.setState({ fontLoaded: true });
   }
 
   render() {
@@ -97,7 +94,7 @@ export default class HomeScreen extends React.Component {
         <AppLoading
           startAsync={this._loadAssetsAsync}
           onFinish={() => this.setState({ isReady: true })}
-          // onError={console.warn}
+          onError={ function() {}}
         />
       );
     }
