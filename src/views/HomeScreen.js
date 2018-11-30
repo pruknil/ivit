@@ -80,6 +80,8 @@ export default class HomeScreen extends React.Component {
 
         'FontAwesome': require('../../assets/fonts/FontAwesome.ttf'),
         'Material Icons': require('../../assets/fonts/MaterialIcons.ttf'),
+        'MaterialIcons': require('../../assets/fonts/MaterialIcons.ttf'),
+        'MaterialCommunityIcons': require('../../assets/fonts/MaterialCommunityIcons.ttf'),
         'Material Design Icons': require('../../assets/fonts/MaterialCommunityIcons.ttf'),
         'Ionicons': require('../../assets/fonts/Ionicons.ttf'),
         'Entypo': require('../../assets/fonts/Entypo.ttf'),

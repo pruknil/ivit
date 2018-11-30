@@ -1,105 +1,178 @@
+import Expo from 'expo';
 import React, { Component } from 'react';
-import {View, ScrollView, Text, StatusBar, SafeAreaView } from 'react-native';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
-import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
-import SliderEntry from '../components/SliderEntry';
-import styles, { colors } from '../styles/index.style';
-import { ENTRIES1} from '../static/entries';
-import { Input, SearchBar, Icon, Button } from 'react-native-elements'
-const SLIDER_1_FIRST_ITEM = 1;
-class Fonts extends Component {
+import { View, ScrollView, StyleSheet, Text, Dimensions,ActivityIndicator ,RefreshControl} from 'react-native';
+import { Input, SearchBar, Icon, Button,  ListItem, } from 'react-native-elements'
 
-      constructor (props) {
-        super(props);
-        this.state = {
-            slider1ActiveSlide: SLIDER_1_FIRST_ITEM
-        };
-    }
-
-    _renderItemWithParallax ({item, index}, parallaxProps) {
-        return (
-            <SliderEntry
-              data={item}
-              even={(index + 1) % 2 === 0}
-              parallax={true}
-              parallaxProps={parallaxProps}
-            />
-        );
-    }
-        mainExample (number, title) {
-        const { slider1ActiveSlide } = this.state;
-
-        return (
-            <View style={styles.exampleContainer}>
-                <Text style={styles.title}>{`Example ${number}`}</Text>
-                <Text style={styles.subtitle}>{title}</Text>
-                <Carousel
-                  ref={c => this._slider1Ref = c}
-                  data={ENTRIES1}
-                  renderItem={this._renderItemWithParallax}
-                  sliderWidth={sliderWidth}
-                  itemWidth={itemWidth}
-                  hasParallaxImages={true}
-                  firstItem={SLIDER_1_FIRST_ITEM}
-                  inactiveSlideScale={0.94}
-                  inactiveSlideOpacity={0.7}
-                  // inactiveSlideShift={20}
-                  containerCustomStyle={styles.slider}
-                  contentContainerCustomStyle={styles.sliderContentContainer}
-                  loop={true}
-                  loopClonesPerSide={2}
-                  autoplay={true}
-                  autoplayDelay={500}
-                  autoplayInterval={5000}
-                  onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }
-                />
-                <Pagination
-                  dotsLength={ENTRIES1.length}
-                  activeDotIndex={slider1ActiveSlide}
-                  containerStyle={styles.paginationContainer}
-                  dotColor={'rgba(255, 255, 255, 0.92)'}
-                  dotStyle={styles.paginationDot}
-                  inactiveDotColor={colors.black}
-                  inactiveDotOpacity={0.4}
-                  inactiveDotScale={0.6}
-                  carouselRef={this._slider1Ref}
-                  tappableDots={!!this._slider1Ref}
-                />
-            </View>
-        );
-    }
-
-    render () {
-        const example1 = this.mainExample(1, 'Default');
+import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import colors from 'HSColors';
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 
-        return (
-            <SafeAreaView style={styles.safeArea}>
-                <View style={styles.container}>
-                    <StatusBar
-                      translucent={true}
-                      backgroundColor={'rgba(0, 0, 0, 0.3)'}
-                      barStyle={'light-content'}
-                    />
-                    { this.gradient }
-                    <ScrollView
-                      style={styles.scrollview}
-                      scrollEventThrottle={200}
-                      directionalLockEnabled={true}
-                    >
-        <View style={[styles.headerContainer]}>
-          <Icon color="white" name="input" size={62} />
-          <Text style={styles.heading}>Inputs</Text>
+const dummySearchBarProps = {
+  showLoading: false,
+  onFocus: () => console.log("focus"),
+  onBlur: () => console.log("blur"),
+  onCancel: () => console.log("cancel"),
+  onClearText: () => console.log("cleared"),
+  onChangeText: text => console.log("text:", text),
+}
 
-          { example1 }
-        </View>
-                        
-                    </ScrollView>
-                </View>
-            </SafeAreaView>
-        );
-    }
+class Search extends Component {
+	  constructor(props){
+		    super(props);
+		    this.state = { isLoading: false,
+		                   refreshing: false,
+		                   dataSource: [],
+		                   selectedMap:{}
+		                  }
+		  }
+
+
+		  componentDidMount(){
+		    this._listData();
+		  }
+		  
+		  _objToQueryString(obj) {
+			  const keyValuePairs = [];
+			  for (const key in obj) {
+			    keyValuePairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]));
+			  }
+			  return keyValuePairs.join('&');
+			}
+		  
+		  _listData = () => {
+			  const queryString = this._objToQueryString({
+				    lat: '13.6735127',
+				    lng: '100.4902452',
+				    name: 'วัด',
+				});
+		    this.setState({refreshing: true});
+		    var headers = new Headers();
+		    headers.append("Authorization", "Basic dXNlcjp1c2Vy");
+		    return fetch(`https://ivit.azurewebsites.net/api/map/temple?${queryString}`,{method: "GET", headers: headers})
+		      .then((response) => response.json())
+		      .then((responseJson) => {
+
+		        this.setState({
+		          refreshing: false,
+		          dataSource: responseJson,
+		        }, function(){
+
+		        });
+
+		      })
+		      .catch((error) =>{
+		        console.error(error);
+		      });
+		  }
+
+		  onPress = (name) => {
+			  console.log(name);
+			}
+
+		  render() {
+
+		    if(this.state.isLoading){
+		      return(
+		        <View style={{flex: 1, padding: 20}}>
+		          <ActivityIndicator/>
+		        </View>
+		      )
+		    }
+
+
+		    return (
+		<View style={styles.container}>
+		  <SearchBar lightTheme={true} placeholder="ค้นหา" {...dummySearchBarProps}  containerStyle={styles.searchbar} />
+		  <ScrollView keyboardShouldPersistTaps="handled"
+		    refreshControl={
+		          <RefreshControl
+		            refreshing={this.state.refreshing}
+		            onRefresh={this._listData}
+		          />
+		        }>
+		      <View style={styles.list}>
+		          {this.state.dataSource.map((l, i) => (
+		            <ListItem
+		              leftAvatar={{ rounded: true, source: { uri: l.picture } }}
+		              key={i}
+		              onPress={() => this.onPress(l.starttime)}
+		              title={l.name}
+		              subtitle={l.starttime}
+		              chevron
+		              bottomDivider
+		            />
+		          ))}
+		      </View>
+		  </ScrollView>
+		</View>
+		    )
+		  }
 }
 
 
-export default Fonts;
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+    flexGrow: 1
+  },
+  headerContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 40,
+    backgroundColor: '#B46486'
+  },
+  heading: {
+    color: 'white',
+    marginTop: 10,
+    fontSize: 22,
+    fontWeight: 'bold'
+  },
+  searchbar: {
+    marginTop: 20,
+  },
+  contentView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  triangleLeft: {
+    position: 'absolute',
+    left: -20,
+    bottom: 0,
+    width: 0,
+    height: 0,
+    borderRightWidth: 20,
+    borderRightColor: 'white',
+    borderBottomWidth: 25,
+    borderBottomColor: 'transparent',
+    borderTopWidth: 25,
+    borderTopColor: 'transparent'
+  },
+  triangleRight: {
+    position: 'absolute',
+    right: -20,
+    top: 0,
+    width: 0,
+    height: 0,
+    borderLeftWidth: 20,
+    borderLeftColor: 'white',
+    borderBottomWidth: 25,
+    borderBottomColor: 'transparent',
+    borderTopWidth: 25,
+    borderTopColor: 'transparent'
+  },
+  inputContainerStyle: {
+    marginTop: 16,
+    width: '90%',
+  },
+  list: {
+    marginTop: 0,
+    borderTopWidth: 1,
+    borderColor: colors.greyOutline,
+    backgroundColor: '#fff',
+    
+  },
+});
+export default Search;
