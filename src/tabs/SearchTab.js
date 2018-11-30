@@ -5,23 +5,23 @@ import { View, Text, StyleSheet } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
-import ListsHome from '../views/lists_home';
-import ListsDetails from '../views/lists_detail';
+import SearchHome from '../views/SearchScreen';
+import SearchDetails from '../views/SearchDetailScreen';
 
-const ListsTabView = ({ navigation }) => (
-  <ListsHome banner="Lists" navigation={navigation} />
+const SearchTabView = ({ navigation }) => (
+  <SearchHome banner="Search" navigation={navigation} />
 );
 
-const ListsDetailTabView = ({ navigation }) => (
-  <ListsDetails banner="Lists Detail" navigation={navigation} />
+const SearchDetailTabView = ({ navigation }) => (
+  <SearchDetails banner="Search Detail" navigation={navigation} />
 );
 
-const ListsTab = StackNavigator({
+const SearchTab = StackNavigator({
   Home: {
-    screen: ListsTabView,
+    screen: SearchTabView,
     path: '/',
     navigationOptions: ({ navigation }) => ({
-      title: 'Lists',
+      title: 'Search',
       headerLeft: (
         <Icon
           name="menu"
@@ -33,13 +33,13 @@ const ListsTab = StackNavigator({
       ),
     }),
   },
-  Lists_Detail: {
-    screen: ListsDetailTabView,
-    path: 'lists_detail',
+  Detail: {
+    screen: SearchDetailTabView,
+    path: 'search_detail',
     navigationOptions: {
-      title: 'Lists Detail',
+      title: 'Search Detail',
     },
   },
 });
 
-export default ListsTab;
+export default SearchTab;

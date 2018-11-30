@@ -4,7 +4,7 @@ import { TabNavigator, StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
 import MainTab from '../tabs/MainTab';
-import FontsTab from '../tabs/fonts';
+import SearchTab from '../tabs/SearchTab';
 
 const MainDrawer = TabNavigator(
   {
@@ -24,11 +24,11 @@ const MainDrawer = TabNavigator(
       },
     },
 
-    FontsTab: {
-      screen: FontsTab,
-      path: '/fonts',
+    SearchTab: {
+      screen: SearchTab,
+      path: '/search',
       navigationOptions: {
-        tabBarLabel: 'Fonts',
+        tabBarLabel: 'Search',
         tabBarIcon: ({ tintColor, focused }) => (
           <Icon
             name={focused ? 'font' : 'font'}
