@@ -4,7 +4,6 @@ import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { View, Image, Dimensions } from 'react-native';
 import { DrawerNavigator, DrawerItems } from 'react-navigation';
 import MainDrawer from '../drawer/MainDrawer';
-import Components from '../drawer/components';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -30,10 +29,7 @@ const MainRoot = DrawerNavigator(
       path: '/mainDrawer',
       screen: MainDrawer,
     },
-    Components: {
-      path: '/components',
-      screen: Components,
-    },
+
     
   },
   {

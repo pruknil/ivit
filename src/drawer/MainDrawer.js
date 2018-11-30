@@ -4,8 +4,6 @@ import { TabNavigator, StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
 import MainTab from '../tabs/MainTab';
-import ListsTab from '../tabs/lists';
-import InputTab from '../tabs/input';
 import FontsTab from '../tabs/fonts';
 
 const MainDrawer = TabNavigator(
@@ -25,31 +23,7 @@ const MainDrawer = TabNavigator(
         ),
       },
     },
-    ListsTab: {
-      screen: ListsTab,
-      path: '/lists',
-      navigationOptions: {
-        tabBarLabel: 'Lists',
-        tabBarIcon: ({ tintColor, focused }) => (
-          <Icon name="list" size={30} type="entypo" color={tintColor} />
-        ),
-      },
-    },
-    InputTab: {
-      screen: InputTab,
-      path: '/input',
-      navigationOptions: {
-        tabBarLabel: 'Input',
-        tabBarIcon: ({ tintColor, focused }) => (
-          <Icon
-            name="wpforms"
-            size={30}
-            type="font-awesome"
-            color={tintColor}
-          />
-        ),
-      },
-    },
+
     FontsTab: {
       screen: FontsTab,
       path: '/fonts',
