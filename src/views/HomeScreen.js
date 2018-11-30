@@ -1,24 +1,35 @@
 import React from 'react';
 import Expo, { AppLoading, Asset, Font } from 'expo';
-import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import { View, Image, Dimensions } from 'react-native';
+
+import { View, Image,Text, Dimensions,StyleSheet } from 'react-native';
 import { DrawerNavigator, DrawerItems } from 'react-navigation';
+import { Avatar, Button ,Icon} from 'react-native-elements'
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import MainDrawer from '../drawer/MainDrawer';
 import OtherScreen from '../views/OtherScreen';
+import colors from 'HSColors';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const CustomDrawerContentComponent = props => (
   <View style={{ flex: 1, backgroundColor: '#43484d' }}>
-    <View style={{ marginTop: 40, justifyContent: 'center', alignItems: 'center' }}>
-      <Image
-        source={require('../images/logo.png')}
-        style={{ width: SCREEN_WIDTH * 0.57 }}
-        resizeMode="contain"
-      />
-    </View>
+
+
+<View style={styles.headerContainer}>
+	<Avatar
+	size="large"
+	rounded
+	source={{uri: "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg"}}
+	/>
+  <Text style={styles.heading}>Pruk Nilsuriyakon</Text>
+</View>
+  
+  
+  
     <View style={{ marginLeft: 10 }}>
       <DrawerItems {...props} />
     </View>
+    
+    
   </View>
 );
 
@@ -58,19 +69,17 @@ const MainRoot = DrawerNavigator(
 
 
 export default class HomeScreen extends React.Component {
-  state = {
-    isReady: false,
-  };
+  
+	state = {
+			isReady: false,
+	};
 
   async _loadAssetsAsync() {
     
     await Font.loadAsync({
-        'georgia': require('../../assets/fonts/Georgia.ttf'),
-        'regular': require('../../assets/fonts/Montserrat-Regular.ttf'),
-        'light': require('../../assets/fonts/Montserrat-Light.ttf'),
-        'bold': require('../../assets/fonts/Montserrat-Bold.ttf'),
+
         'FontAwesome': require('../../assets/fonts/FontAwesome.ttf'),
-        'Material Icons': require('../../assets/fonts/MaterialCommunityIcons.ttf'),
+        'Material Icons': require('../../assets/fonts/MaterialIcons.ttf'),
         'Material Design Icons': require('../../assets/fonts/MaterialCommunityIcons.ttf'),
         'Ionicons': require('../../assets/fonts/Ionicons.ttf'),
         'Entypo': require('../../assets/fonts/Entypo.ttf'),
@@ -117,3 +126,62 @@ export default class HomeScreen extends React.Component {
       this.props.navigation.navigate('Auth');
     };*/
   }
+
+
+const styles = StyleSheet.create({
+	  container: {
+	    flex: 1,
+	  },
+	  list: {
+	    marginTop: 20,
+	    borderTopWidth: 1,
+	    borderColor: colors.greyOutline,
+	    backgroundColor: '#fff',
+	  },
+	  headerContainer: {
+			flexDirection: 'row',
+		    justifyContent: 'flex-start',
+		    alignItems: 'center',
+		    padding: 40,
+		    backgroundColor: '#D291BC',
+		  },
+	  heading: {
+	    color: 'white',
+	    marginTop: 10,
+	    fontSize: 22,
+	    paddingLeft: 10,
+	  },
+	  fonts: {
+	    marginBottom: 8,
+	  },
+	  user: {
+	    flexDirection: 'row',
+	    marginBottom: 6,
+	  },
+	  image: {
+	    width: 30,
+	    height: 30,
+	    marginRight: 10,
+	  },
+	  name: {
+	    fontSize: 16,
+	    marginTop: 5,
+	  },
+	  social: {
+	    flexDirection: 'row',
+	    justifyContent: 'center',
+	  },
+	  subtitleView: {
+	    flexDirection: 'row',
+	    paddingLeft: 10,
+	    paddingTop: 5,
+	  },
+	  ratingImage: {
+	    height: 19.21,
+	    width: 100,
+	  },
+	  ratingText: {
+	    paddingLeft: 10,
+	    color: 'grey',
+	  },
+	});

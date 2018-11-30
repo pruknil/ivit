@@ -9,6 +9,8 @@ import {
 
 export default class OtherScreen extends React.Component {
 	
+	
+	
     static navigationOptions = {
       title: 'Lots of features here',
     };

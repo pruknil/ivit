@@ -55,7 +55,7 @@ const MainDrawer = TabNavigator(
 );
 
 MainDrawer.navigationOptions = {
-  drawerLabel: 'MainDrawer',
+  drawerLabel: 'Grab Monk',
   drawerIcon: ({ tintColor }) => (
     <Icon
       name="home"

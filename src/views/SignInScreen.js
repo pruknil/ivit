@@ -221,11 +221,18 @@ export default class SignInScreen extends React.Component {
     
     facebookLogin = async () => {
     	  const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync('262669411090863', {
-    	    permissions: ['public_profile'],
+    	    permissions: ['public_profile','email'],
     	  });
     	  if (type === 'success') {
     	    const response = await fetch(
-    	     `https://graph.facebook.com/me?access_token=${token}`);
+    	     `https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,picture.type(large)`);
+    	    
+    	    const { id, name, email,picture } = await response.json();
+    	    
+    	    console.log(id);
+    	    console.log(name);
+    	    console.log(email);
+    	    console.log(picture);
     	      AsyncStorage.setItem('userToken', `${token}`); 
       	      this.props.navigation.navigate('App');
     	  }
