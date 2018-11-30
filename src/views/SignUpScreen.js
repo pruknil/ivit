@@ -70,11 +70,9 @@ export default class SignUpScreen extends React.Component {
 
         LayoutAnimation.easeInEaseOut()
         this.setState({ isLoading: false })
-        //Alert.alert('🎸', 'You rock')
 
     }
   }
-
 
   validateEmail() {
     const { email } = this.state
@@ -106,9 +104,9 @@ export default class SignUpScreen extends React.Component {
 
   setSelectedType = selectedType =>
     LayoutAnimation.easeInEaseOut() || this.setState({ selectedType })
-  static navigationOptions = {
-      //title: 'Welcome to the app!',
-
+    static navigationOptions = {
+      //title: 'Please sign in',
+      header: null
     };
   
     render() {
@@ -193,7 +191,18 @@ export default class SignUpScreen extends React.Component {
               onPress={this.signup}
               disabled={isLoading}
             />
-              </ImageBackground>
+              
+            <Button
+            title='Cancel'
+            activeOpacity={1}
+            underlayColor="transparent"
+            loadingProps={{size: 'small', color: 'white'}}
+            buttonStyle={{height: 50, width: 250, backgroundColor: 'transparent', borderWidth: 2, borderColor: 'white', borderRadius: 30}}
+            containerStyle={{marginVertical: 10}}
+            titleStyle={{fontWeight: 'bold', color: 'white'}}
+            onPress={() => {this.props.navigation.navigate('SignIn')}}
+          />
+            </ImageBackground>
         </View>
       );
     }
