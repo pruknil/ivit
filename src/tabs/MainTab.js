@@ -6,18 +6,12 @@ import { StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
 import ButtonsHome from '../views/Main';
-import ButtonsDetails from '../views/buttons_detail';
 
 const ButtonsTabView = ({ navigation }) => (
   <ButtonsHome navigation={navigation} />
 );
 
-const ButtonsDetailTabView = ({ navigation }) => (
-  <ButtonsDetails
-    banner={`${navigation.state.params.name}s Profile`}
-    navigation={navigation}
-  />
-);
+
 
 const ButtonsTab = StackNavigator({
   Buttons: {
@@ -26,13 +20,8 @@ const ButtonsTab = StackNavigator({
     headerMode: 'none',
     navigationOptions: {headerVisible: false},
   },
-  Button_Detail: {
-    screen: ButtonsDetailTabView,
-    path: '/buttons_detail',
-    navigationOptions: {
-      title: 'Buttons Detail',
-    },
-  },
+
+
 },{
     headerMode: 'none',
     navigationOptions: {
