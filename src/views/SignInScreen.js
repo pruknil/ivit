@@ -42,6 +42,8 @@ export default class SignInScreen extends React.Component {
         this.setState({ fontLoaded: true });
       }
       
+
+      
     static navigationOptions = {
       //title: 'Please sign in',
       header: null
@@ -71,11 +73,10 @@ export default class SignInScreen extends React.Component {
           <View style={styles.loginView}>
             <View style={styles.loginTitle}>
               <View style={{flexDirection: 'row'}}>
-                <Text style={styles.travelText}>Bad</Text>
-                <Text style={styles.plusText}>+</Text>
+                <Text style={styles.travelText}>IVIT</Text>
               </View>
               <View style={{marginTop: -10}}>
-                <Text style={styles.travelText}>Minton</Text>
+                <Text style={styles.descText}>Grab Monk</Text>
               </View>
             </View>
             <View style={styles.loginInput}>
@@ -148,6 +149,7 @@ export default class SignInScreen extends React.Component {
               title='Sign In With Facebook'
               button
               type='facebook'
+              onPress={this.facebookLogin}
             />
             <View style={styles.footerView}>
               <Text style={{color: 'grey'}}>
@@ -212,10 +214,23 @@ export default class SignInScreen extends React.Component {
       firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
-        .then(() => {AsyncStorage.setItem('userToken', 'abc'); this.props.navigation.navigate('App');})
+        .then(() => {AsyncStorage.setItem('userToken', email); this.props.navigation.navigate('App');})
         .catch(error => this.refs.toast.show('Wrong username or password'))
     }
 
+    
+    facebookLogin = async () => {
+    	  const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync('262669411090863', {
+    	    permissions: ['public_profile'],
+    	  });
+    	  if (type === 'success') {
+    	    const response = await fetch(
+    	     `https://graph.facebook.com/me?access_token=${token}`);
+    	      AsyncStorage.setItem('userToken', `${token}`); 
+      	      this.props.navigation.navigate('App');
+    	  }
+    	 }
+    
   goSignUpScreen = () => {
       this.props.navigation.navigate('SignUp');
     };
@@ -247,10 +262,10 @@ export default class SignInScreen extends React.Component {
     },
     travelText: {
       color: 'white',
-      fontSize: 30,
+      fontSize: 40,
       fontFamily: 'bold'
     },
-    plusText: {
+    descText: {
       color: 'white',
       fontSize: 30,
       fontFamily: 'regular'

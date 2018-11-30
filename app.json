@@ -5,6 +5,9 @@
     "slug": "ivit",
     "privacy": "public",
     "sdkVersion": "30.0.0",
+    "facebookScheme": "fb262669411090863",
+ 	"FacebookAppID":"262669411090863",
+ 	"facebookDisplayName": "ivit",
     "platforms": [
       "ios",
       "android"
