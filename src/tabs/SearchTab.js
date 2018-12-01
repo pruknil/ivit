@@ -7,6 +7,7 @@ import { Icon } from 'react-native-elements';
 
 import SearchHome from '../views/SearchScreen';
 import SearchDetails from '../views/MapScreen';
+import Booking from '../views/BookingScreen';
 
 const SearchTabView = ({ navigation }) => (
   <SearchHome banner="Search" navigation={navigation} />
@@ -15,6 +16,10 @@ const SearchTabView = ({ navigation }) => (
 const SearchDetailTabView = ({ navigation }) => (
   <SearchDetails banner="Search Detail" navigation={navigation} />
 );
+
+const BookingTabView = ({ navigation }) => (
+		  <Booking banner="Booking" navigation={navigation} />
+		);
 
 const SearchTab = StackNavigator({
   Home: {
@@ -40,6 +45,13 @@ const SearchTab = StackNavigator({
       title: 'Search Detail',
     },
   },
+  Booking: {
+	    screen: BookingTabView,
+	    path: 'booking',
+	    navigationOptions: {
+	      title: 'Booking Detail',
+	    },
+	  },
 });
 
 export default SearchTab;

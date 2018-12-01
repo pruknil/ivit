@@ -57,7 +57,14 @@ export default class MapScreen extends React.Component {
     	        >
 
     	        </MapView>
+                <Button
+                title="นิมนต์เลย !!"
 
+                activeOpacity={0.5}
+                titleStyle={{color: 'white', fontSize: 20}}
+                containerStyle={{marginTop: -10}}
+                onPress={() => this.props.navigation.navigate('Booking',{temple: temple,})}
+              />
     	      </View>
       );
 
