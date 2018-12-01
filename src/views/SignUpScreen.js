@@ -65,7 +65,7 @@ export default class SignUpScreen extends React.Component {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(() => {AsyncStorage.setItem('userToken', 'abc'); this.props.navigation.navigate('App');})
+        .then(() => {AsyncStorage.setItem('userToken', email); this.props.navigation.navigate('App');})
         .catch(error => this.refs.toast.show(error.message))
 
         LayoutAnimation.easeInEaseOut()

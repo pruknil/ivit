@@ -12,10 +12,10 @@ const MainDrawer = TabNavigator(
       screen: MainTab,
       path: '/mains',
       navigationOptions: {
-        tabBarLabel: 'Mains',
+        tabBarLabel: 'Home',
         tabBarIcon: ({ tintColor, focused }) => (
           <Icon
-            name={focused ? 'emoticon-cool' : 'emoticon-neutral'}
+            name={focused ? 'home' : 'home-outline'}
             size={30}
             type="material-community"
             color={tintColor}
@@ -31,7 +31,7 @@ const MainDrawer = TabNavigator(
         tabBarLabel: 'Search',
         tabBarIcon: ({ tintColor, focused }) => (
           <Icon
-            name={focused ? 'font' : 'font'}
+            name={focused ? 'search' : 'search'}
             size={30}
             type="font-awesome"
             color={tintColor}
@@ -55,7 +55,7 @@ const MainDrawer = TabNavigator(
 );
 
 MainDrawer.navigationOptions = {
-  drawerLabel: 'Grab Monk',
+  drawerLabel: 'นิมนต์พระ',
   drawerIcon: ({ tintColor }) => (
     <Icon
       name="home"
@@ -64,7 +64,7 @@ MainDrawer.navigationOptions = {
         width: 30,
         height: 30
       }}
-      type="material"
+      type="material-community"
       color={tintColor}
     />
   ),

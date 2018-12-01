@@ -1,12 +1,12 @@
 import React from 'react';
 import Expo, { AppLoading, Asset, Font } from 'expo';
 
-import { View, Image,Text, Dimensions,StyleSheet } from 'react-native';
+import { View, Image,Text, Dimensions,StyleSheet,AsyncStorage } from 'react-native';
 import { DrawerNavigator, DrawerItems } from 'react-navigation';
 import { Avatar, Button ,Icon} from 'react-native-elements'
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import MainDrawer from '../drawer/MainDrawer';
-import OtherScreen from '../views/OtherScreen';
+import ProfileDrawer from '../drawer/ProfileDrawer';
 import colors from 'HSColors';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -18,9 +18,9 @@ const CustomDrawerContentComponent = props => (
 	<Avatar
 	size="large"
 	rounded
-	source={{uri: "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg"}}
+	source={{uri: props.screenProps.userLogon.picture}}
 	/>
-  <Text style={styles.heading}>Pruk Nilsuriyakon</Text>
+  <Text style={styles.heading}>{props.screenProps.userLogon.name}</Text>
 </View>
   
   
@@ -41,8 +41,8 @@ const MainRoot = DrawerNavigator(
       screen: MainDrawer,
     },
     OtherScreen: {
-        path: '/otherScreen',
-        screen: OtherScreen,
+        path: '/proFileScreen',
+        screen: ProfileDrawer,
       },
 
     
@@ -70,6 +70,13 @@ const MainRoot = DrawerNavigator(
 
 export default class HomeScreen extends React.Component {
   
+	constructor(props) {
+		    super(props)
+		    this.state = {
+		      userLogon:{},
+		    }
+	}
+	  
 	state = {
 			isReady: false,
 	};
@@ -90,6 +97,14 @@ export default class HomeScreen extends React.Component {
       this.setState({ fontLoaded: true });
   }
 
+  async componentDidMount() {
+	  const retrievedItem =  await AsyncStorage.getItem('userToken');
+	  console.log(retrievedItem);
+	  const item = JSON.parse(retrievedItem); 
+	  this.setState({ userLogon: item });
+  }
+
+  
   render() {
     if (!this.state.isReady) {
       return (
@@ -102,7 +117,7 @@ export default class HomeScreen extends React.Component {
     }
 
     return (
-      <MainRoot />
+      <MainRoot screenProps={{userLogon: this.state.userLogon}}/>
     );
   }
 

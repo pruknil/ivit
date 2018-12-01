@@ -214,7 +214,13 @@ export default class SignInScreen extends React.Component {
       firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
-        .then(() => {AsyncStorage.setItem('userToken', email); this.props.navigation.navigate('App');})
+        .then(() => {
+        	
+        AsyncStorage.setItem('userToken', '{"email":"'+email+'"}'); 
+        
+        this.props.navigation.navigate('App');
+        
+        })
         .catch(error => this.refs.toast.show('Wrong username or password'))
     }
 
@@ -233,7 +239,8 @@ export default class SignInScreen extends React.Component {
     	    console.log(name);
     	    console.log(email);
     	    console.log(picture);
-    	      AsyncStorage.setItem('userToken', `${token}`); 
+    	    
+    	      AsyncStorage.setItem('userToken', '{"name": "'+name+'","fbid": "'+id+'","picture": "'+picture.data.url+'","email": "'+email+'"}'); 
       	      this.props.navigation.navigate('App');
     	  }
     	 }

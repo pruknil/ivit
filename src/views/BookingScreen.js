@@ -9,6 +9,7 @@ import {
 	  Content,
 	  Picker,Label,Input,Item,
 	  Form , Icon ,Button,Text} from "native-base";
+import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import colors from 'HSColors';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -21,11 +22,14 @@ export default class BookingScreen extends React.Component {
 		    this.state = {
 		    		isLoading: false,
 	                refreshing: false,
-		    		selected1: "key1",
+	                objective: "",
+	                payment: "",
 		    		dataSource: [],
 		    		quantity: 0,
 		    		contactTel: "",
+		    		fromdate:new Date(),
 		    };
+		    this.onDayPress = this.onDayPress.bind(this);
 	}
 	  componentDidMount(){
 		    this._getActivity();
@@ -53,12 +57,51 @@ export default class BookingScreen extends React.Component {
 		      });
 		  };
 		  
-	  onValueChange(value: string) {
+ 
+		  _doBooking = async () => {
+
+			    this.setState({refreshing: true});
+			    var headers = new Headers();
+			    headers.append("Authorization", "Basic dXNlcjp1c2Vy");
+			    
+			    var body = JSON.stringify({
+			        firstParam: 'yourValue',
+			        secondParam: 'yourOtherValue',
+			      })
+			    
+			    return fetch(`https://ivit.azurewebsites.net/api/booking/create`,{method: "POST", headers: headers,body:body})
+			      .then((response) => response.json())
+			      .then((responseJson) => {
+
+			        this.setState({
+			          refreshing: false,
+			          dataSource: responseJson,
+			        }, function(){
+
+			        });
+
+			      })
+			      .catch((error) =>{
+			        console.error(error);
+			      });
+			  };
+			  
+	onSelectObjective(value: string) {
 		    this.setState({
-		      selected1: value
+		    	objective: value
 		    });
+	}
+	
+	onSelectPayment(value: string) {
+		this.setState({
+			payment: value
+		});
 	  }
-	  
+	  onDayPress(day) {
+		    this.setState({
+		    	fromdate: day.dateString
+		    });
+		  }	 
   render() {
 	  const { navigation } = this.props;
 	  const temple = navigation.getParam('temple', 'NO-ID');
@@ -74,8 +117,8 @@ export default class BookingScreen extends React.Component {
 			              iosHeader="เลือกกิจนิมนต์"
 			              iosIcon={<Icon name="ios-arrow-down-outline" />}
 			              style={{ width: undefined }}
-			              selectedValue={this.state.selected1}
-			              onValueChange={this.onValueChange.bind(this)}
+			              selectedValue={this.state.objective}
+			              onValueChange={this.onSelectObjective.bind(this)}
 			            >
 			              {this.state.dataSource.map((l, i) => (
 			            		  <ItemP label={l.name} value={l.name} key={i} />
@@ -83,6 +126,19 @@ export default class BookingScreen extends React.Component {
 			            	  
 			            </Picker>
 		            </Item>
+		            
+		            
+	                <Item fixedLabel>
+	                  <Label>วันรับกิจ</Label>
+	                  
+			            <Calendar
+			            onDayPress={this.onDayPress}
+			            style={styles.calendar}
+			            hideExtraDays
+			            markedDates={{[this.state.fromdate]: {selected: true, disableTouchEvent: true, selectedDotColor: 'orange'}}}
+			          />
+	                </Item>
+
 	                <Item fixedLabel>
 	                  <Label>จำนวนพระ</Label>
 	                  <Input onChangeText={quantity => this.setState({quantity})} keyboardType='numeric'/>
@@ -91,8 +147,23 @@ export default class BookingScreen extends React.Component {
 	                  <Label>เบอร์ติดต่อ</Label>
 	                  <Input keyboardType='numeric'/>
 	                </Item>
+		          	<Item fixedLabel>
+		          		<Label>การชำระเงิน</Label>
+		  	            <Picker
+			              mode="dropdown"
+			              iosHeader="เลือกการชำระเงิน"
+			              iosIcon={<Icon name="ios-arrow-down-outline" />}
+			              style={{ width: undefined }}
+			              selectedValue={this.state.payment}
+			              onValueChange={this.onSelectPayment.bind(this)}
+			            >
+			              	<ItemP label='บัตรเครดิต' value='บัตรเครดิต'/>
+			            	<ItemP label="เก็บเงินปลายทาง" value="เก็บเงินปลายทาง"/>
+			            	<ItemP label="KPlus" value="KPlus"/>
+			            </Picker>
+		            </Item>
 	          </Form>
-	          <Button block style={{ margin: 15, marginTop: 50 }}>
+	          <Button block style={{ margin: 15, marginTop: 50 }} >
 	            <Text>Booking</Text>
 	          </Button>
 	        </Content>
@@ -106,7 +177,6 @@ export default class BookingScreen extends React.Component {
     };
 
   }
-
 
 const styles = StyleSheet.create({
 	  container: {
@@ -136,4 +206,17 @@ const styles = StyleSheet.create({
 		    borderRadius: 6,
 		    borderColor: "transparent"
 		  },
+      	  calendar: {
+        	    borderTopWidth: 1,
+        	    paddingTop: 5,
+        	    borderBottomWidth: 1,
+        	    borderColor: '#eee',
+        	    height: 350
+        	  },
+        	  text: {
+        	    textAlign: 'center',
+        	    borderColor: '#bbb',
+        	    padding: 10,
+        	    backgroundColor: '#eee'
+        	  },		  
 	});
