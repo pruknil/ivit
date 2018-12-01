@@ -1,7 +1,7 @@
 import React from 'react';
-import { MapView } from "expo";
+import { MapView ,Location} from "expo";
 
-import { View, Image, Dimensions,StyleSheet} from 'react-native';
+import { View, Image, Dimensions,StyleSheet,TouchableOpacity} from 'react-native';
 import { DrawerNavigator, DrawerItems } from 'react-navigation';
 import { Avatar,  FormLabel, FormInput} from 'react-native-elements'
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
@@ -9,7 +9,7 @@ import {
 	  Content,
 	  Picker,Label,Input,Item,
 	  Form , Icon ,Button,Text} from "native-base";
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import DateTimePicker from 'react-native-modal-datetime-picker';
 import colors from 'HSColors';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -20,16 +20,16 @@ export default class BookingScreen extends React.Component {
 		    super(props);
 
 		    this.state = {
+		    		 isDateTimePickerVisible: false,
 		    		isLoading: false,
 	                refreshing: false,
 	                objective: "",
 	                payment: "",
 		    		dataSource: [],
 		    		quantity: 0,
-		    		contactTel: "",
+		    		tel: "",
 		    		fromdate:new Date(),
 		    };
-		    this.onDayPress = this.onDayPress.bind(this);
 	}
 	  componentDidMount(){
 		    this._getActivity();
@@ -57,30 +57,62 @@ export default class BookingScreen extends React.Component {
 		      });
 		  };
 		  
+		  _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
+		  
+		  _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
+		 
+		  _handleDatePicked = (date) => {
+		    console.log('A date has been picked: ', date);
+		    this.setState({
+		    	fromdate: date
+		    });
+		    this._hideDateTimePicker();
+		  };
+	  
  
 		  _doBooking = async () => {
+			  console.log('doBooking')
+			  
+		    let location = await Location.getCurrentPositionAsync({});
+			    const retrievedItem =  await AsyncStorage.getItem('userToken');
+			    console.log(retrievedItem);
+			    const userLogon = JSON.parse(retrievedItem);
 
+		    
+	  const { navigation } = this.props;
+	  const temple = navigation.getParam('temple', '');
+			  console.log(temple)
 			    this.setState({refreshing: true});
 			    var headers = new Headers();
 			    headers.append("Authorization", "Basic dXNlcjp1c2Vy");
-			    
+			    headers.append("Accept", "application/json");
+			    headers.append("Content-Type", "application/json");
 			    var body = JSON.stringify({
-			        firstParam: 'yourValue',
-			        secondParam: 'yourOtherValue',
+			    	objective: this.state.objective,
+			    	email:userLogon.email,
+			    	payment: this.state.payment,
+			    	templeId: temple.placeId,
+			    	lat: location.coords.latitude,
+			    	lng: location.coords.longitude,
+			    	quantity: this.state.quantity,
+			    	fromdate:this.state.fromdate,
+			    	status: '0',
 			      })
 			    
 			    return fetch(`https://ivit.azurewebsites.net/api/booking/create`,{method: "POST", headers: headers,body:body})
-			      .then((response) => response.json())
-			      .then((responseJson) => {
+			      .then((response) => {
+			    	  console.log(response)
+				        this.setState({
+				          refreshing: false,
+				          
 
-			        this.setState({
-			          refreshing: false,
-			          dataSource: responseJson,
-			        }, function(){
+				          
+				          
+				        }, function(){
 
-			        });
+				        });
 
-			      })
+				      })
 			      .catch((error) =>{
 			        console.error(error);
 			      });
@@ -97,14 +129,9 @@ export default class BookingScreen extends React.Component {
 			payment: value
 		});
 	  }
-	  onDayPress(day) {
-		    this.setState({
-		    	fromdate: day.dateString
-		    });
-		  }	 
+ 
   render() {
-	  const { navigation } = this.props;
-	  const temple = navigation.getParam('temple', 'NO-ID');
+
       return (
 	      <View style={styles.container}>
 
@@ -128,16 +155,20 @@ export default class BookingScreen extends React.Component {
 		            </Item>
 		            
 		            
-	                <Item fixedLabel>
-	                  <Label>วันรับกิจ</Label>
-	                  
-			            <Calendar
-			            onDayPress={this.onDayPress}
-			            style={styles.calendar}
-			            hideExtraDays
-			            markedDates={{[this.state.fromdate]: {selected: true, disableTouchEvent: true, selectedDotColor: 'orange'}}}
-			          />
-	                </Item>
+
+			            
+		                <Item fixedLabel>
+		                  <Label>เวลารับกิจ</Label>
+			                <TouchableOpacity onPress={this._showDateTimePicker}>
+			                  <Text>เลือกวันเวลา</Text>
+			                </TouchableOpacity>
+			                <DateTimePicker
+			                  isVisible={this.state.isDateTimePickerVisible}
+			                  onConfirm={this._handleDatePicked}
+			                  onCancel={this._hideDateTimePicker}
+			                  mode="datetime"
+			                />
+		                </Item>
 
 	                <Item fixedLabel>
 	                  <Label>จำนวนพระ</Label>
@@ -145,7 +176,7 @@ export default class BookingScreen extends React.Component {
 	                </Item>
 	                <Item fixedLabel>
 	                  <Label>เบอร์ติดต่อ</Label>
-	                  <Input keyboardType='numeric'/>
+	                  <Input onChangeText={tel => this.setState({tel})} keyboardType='numeric'/>
 	                </Item>
 		          	<Item fixedLabel>
 		          		<Label>การชำระเงิน</Label>
@@ -163,7 +194,7 @@ export default class BookingScreen extends React.Component {
 			            </Picker>
 		            </Item>
 	          </Form>
-	          <Button block style={{ margin: 15, marginTop: 50 }} >
+	          <Button block style={{ margin: 15, marginTop: 50 }} onPress={this._doBooking}>
 	            <Text>Booking</Text>
 	          </Button>
 	        </Content>
@@ -206,17 +237,5 @@ const styles = StyleSheet.create({
 		    borderRadius: 6,
 		    borderColor: "transparent"
 		  },
-      	  calendar: {
-        	    borderTopWidth: 1,
-        	    paddingTop: 5,
-        	    borderBottomWidth: 1,
-        	    borderColor: '#eee',
-        	    height: 350
-        	  },
-        	  text: {
-        	    textAlign: 'center',
-        	    borderColor: '#bbb',
-        	    padding: 10,
-        	    backgroundColor: '#eee'
-        	  },		  
+		  
 	});

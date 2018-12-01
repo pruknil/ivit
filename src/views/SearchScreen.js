@@ -89,7 +89,7 @@ export default class Search extends Component {
 		  }
 
 		  onPress = (obj) => {
-			  //console.log(temple.icon);
+			 // console.log(this.state.location);
 			  this.props.navigation.navigate('Detail',{temple: obj,});
 			}
 
