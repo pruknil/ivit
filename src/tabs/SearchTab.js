@@ -6,7 +6,7 @@ import { StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
 import SearchHome from '../views/SearchScreen';
-import SearchDetails from '../views/SearchDetailScreen';
+import SearchDetails from '../views/MapScreen';
 
 const SearchTabView = ({ navigation }) => (
   <SearchHome banner="Search" navigation={navigation} />

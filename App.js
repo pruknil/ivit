@@ -10,7 +10,6 @@ import { StackNavigator, SwitchNavigator } from 'react-navigation'; // 1.3.0
 import HomeScreen from './src/views/HomeScreen';
 import SignInScreen from './src/views/SignInScreen';
 import SignUpScreen from './src/views/SignUpScreen';
-import OtherScreen from './src/views/OtherScreen';
 class AuthLoadingScreen extends React.Component {
 
   constructor() {
@@ -41,7 +40,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const AppStack = StackNavigator({ Home: HomeScreen, Other: OtherScreen });
+const AppStack = StackNavigator({ Home: HomeScreen});
 const AuthStack = StackNavigator({ SignIn: SignInScreen ,SignUp: SignUpScreen });
 
 export default SwitchNavigator(

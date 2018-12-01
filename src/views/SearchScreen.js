@@ -1,6 +1,6 @@
-import Expo from 'expo';
+import { Expo,Constants, Location, Permissions } from 'expo';
 import React, { Component } from 'react';
-import { View, ScrollView, StyleSheet, Text, Dimensions,ActivityIndicator ,RefreshControl} from 'react-native';
+import { View, ScrollView, StyleSheet, Text, Dimensions,ActivityIndicator ,RefreshControl,Platform} from 'react-native';
 import { Input, SearchBar, Icon, Button,  ListItem, } from 'react-native-elements'
 
 import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
@@ -18,33 +18,32 @@ const dummySearchBarProps = {
   onChangeText: text => console.log("text:", text),
 }
 
-class Search extends Component {
+export default class Search extends Component {
 	  constructor(props){
 		    super(props);
 		    this.state = { isLoading: false,
 		                   refreshing: false,
 		                   dataSource: [],
-		                   selectedMap:{}
+		                   selectedMap:{},
+		                   location: {},
+		                   errorMessage: null,
 		                  }
 		  }
 
+	  _getLocationAsync = async () => {
+		    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+		    if (status !== 'granted') {
+		      this.setState({
+		        errorMessage: 'Permission to access location was denied',
+		      });
+		    }
 
-		  componentDidMount(){
-		    this._listData();
-		  }
-		  
-		  _objToQueryString(obj) {
-			  const keyValuePairs = [];
-			  for (const key in obj) {
-			    keyValuePairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]));
-			  }
-			  return keyValuePairs.join('&');
-			}
-		  
-		  _listData = () => {
+		    let location = await Location.getCurrentPositionAsync({});
+		    this.setState({ location });
+
 			  const queryString = this._objToQueryString({
-				    lat: '13.6735127',
-				    lng: '100.4902452',
+				    lat: this.state.location.coords.latitude,
+				    lng: this.state.location.coords.longitude,
 				    name: 'วัด',
 				});
 		    this.setState({refreshing: true});
@@ -65,14 +64,37 @@ class Search extends Component {
 		      .catch((error) =>{
 		        console.error(error);
 		      });
+		  };
+		  
+		  componentDidMount(){
+		    this._listData();
+		  }
+		  
+		  _objToQueryString(obj) {
+			  const keyValuePairs = [];
+			  for (const key in obj) {
+			    keyValuePairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]));
+			  }
+			  return keyValuePairs.join('&');
+			}
+		  
+		  _listData = () => {
+			    if (Platform.OS === 'android' && !Constants.isDevice) {
+			        this.setState({
+			          errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
+			        });
+			      } else {
+			        this._getLocationAsync();
+			      }
 		  }
 
-		  onPress = (name) => {
-			  console.log(name);
+		  onPress = (temple) => {
+			  //console.log(temple.icon);
+			  this.props.navigation.navigate('Detail');
+			  console.log(temple.icon);
 			}
 
 		  render() {
-
 		    if(this.state.isLoading){
 		      return(
 		        <View style={{flex: 1, padding: 20}}>
@@ -95,9 +117,9 @@ class Search extends Component {
 		      <View style={styles.list}>
 		          {this.state.dataSource.map((l, i) => (
 		            <ListItem
-		              leftAvatar={{ rounded: true, source: { uri: l.picture } }}
+		              leftAvatar={{ rounded: true, source: { uri: l.icon } }}
 		              key={i}
-		              onPress={() => this.onPress(l.starttime)}
+		              onPress={() => this.onPress(l)}
 		              title={l.name}
 		              subtitle={l.starttime}
 		              chevron
@@ -175,4 +197,4 @@ const styles = StyleSheet.create({
     
   },
 });
-export default Search;
+

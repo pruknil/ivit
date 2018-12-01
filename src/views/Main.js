@@ -90,8 +90,7 @@ render () {
                   directionalLockEnabled={true}
                 >
     <View style={[styles.headerContainer]}>
-      <Icon color="white" name="input" size={62} />
-      <Text style={styles.heading}>Inputs</Text>
+
 
       { example1 }
     </View>
