@@ -18,10 +18,13 @@ export default class BookingScreen extends React.Component {
 	 constructor(props) {
 		    super(props);
 
-		    this.state = {isLoading: false,
-	                   refreshing: false,
+		    this.state = {
+		    		isLoading: false,
+	                refreshing: false,
 		    		selected1: "key1",
 		    		dataSource: [],
+		    		quantity: 0,
+		    		contactTel: "",
 		    };
 	}
 	  componentDidMount(){
@@ -82,7 +85,7 @@ export default class BookingScreen extends React.Component {
 		            </Item>
 	                <Item fixedLabel>
 	                  <Label>จำนวนพระ</Label>
-	                  <Input keyboardType='numeric'/>
+	                  <Input onChangeText={quantity => this.setState({quantity})} keyboardType='numeric'/>
 	                </Item>
 	                <Item fixedLabel>
 	                  <Label>เบอร์ติดต่อ</Label>
