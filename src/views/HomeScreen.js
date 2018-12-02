@@ -1,7 +1,7 @@
 import React from 'react';
 import Expo, { AppLoading, Asset, Font } from 'expo';
 
-import { View, Image,Text, Dimensions,StyleSheet,AsyncStorage } from 'react-native';
+import { View, Image,Text, Dimensions,StyleSheet,AsyncStorage,ImageBackground } from 'react-native';
 import { DrawerNavigator, DrawerItems } from 'react-navigation';
 import { Avatar, Button ,Icon} from 'react-native-elements'
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
@@ -9,20 +9,20 @@ import MainDrawer from '../drawer/MainDrawer';
 import ProfileDrawer from '../drawer/ProfileDrawer';
 import colors from 'HSColors';
 const SCREEN_WIDTH = Dimensions.get('window').width;
-
+const BG_IMAGE = require('../../assets/images/menu_header.jpg');
 const CustomDrawerContentComponent = props => (
   <View style={{ flex: 1, backgroundColor: '#43484d' }}>
 
+  <ImageBackground source={BG_IMAGE} style={styles.headerContainer} >
 
-<View style={styles.headerContainer}>
 	<Avatar
 	size="large"
 	rounded
 	source={{uri: props.screenProps.userLogon.picture}}
 	/>
   <Text style={styles.heading}>{props.screenProps.userLogon.name}</Text>
-</View>
-  
+
+</ImageBackground>
   
   
     <View style={{ marginLeft: 10 }}>
@@ -155,6 +155,14 @@ const styles = StyleSheet.create({
 	    borderColor: colors.greyOutline,
 	    backgroundColor: '#fff',
 	  },
+	    bgImage: {
+	        flex: 1,
+	        top: 0,
+	        left: 0,
+
+	        justifyContent: 'center',
+	        alignItems: 'center'
+	      },
 	  headerContainer: {
 			flexDirection: 'row',
 		    justifyContent: 'flex-start',

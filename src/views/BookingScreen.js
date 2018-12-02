@@ -1,7 +1,7 @@
 import React from 'react';
 import { MapView ,Location} from "expo";
 
-import { View, Image, Dimensions,StyleSheet,TouchableOpacity} from 'react-native';
+import { View, Image, Dimensions,StyleSheet,TouchableOpacity,AsyncStorage} from 'react-native';
 import { DrawerNavigator, DrawerItems } from 'react-navigation';
 import { Avatar,  FormLabel, FormInput} from 'react-native-elements'
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
@@ -81,7 +81,7 @@ export default class BookingScreen extends React.Component {
 		    
 	  const { navigation } = this.props;
 	  const temple = navigation.getParam('temple', '');
-			  console.log(temple)
+			  //console.log(temple)
 			    this.setState({refreshing: true});
 			    var headers = new Headers();
 			    headers.append("Authorization", "Basic dXNlcjp1c2Vy");
@@ -92,10 +92,12 @@ export default class BookingScreen extends React.Component {
 			    	email:userLogon.email,
 			    	payment: this.state.payment,
 			    	templeId: temple.placeId,
+			    	templeName: temple.name,
 			    	lat: location.coords.latitude,
 			    	lng: location.coords.longitude,
 			    	quantity: this.state.quantity,
 			    	fromdate:this.state.fromdate,
+			    	tel:this.state.tel,
 			    	status: '0',
 			      })
 			    
@@ -104,12 +106,10 @@ export default class BookingScreen extends React.Component {
 			    	  console.log(response)
 				        this.setState({
 				          refreshing: false,
-				          
-
-				          
-				          
 				        }, function(){
-
+				        	
+				        	console.log(response.status)
+				        	this.props.navigation.navigate('MainTab');
 				        });
 
 				      })

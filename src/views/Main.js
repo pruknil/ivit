@@ -8,13 +8,54 @@ import SliderEntry from '../components/SliderEntry';
 import styles, { colors } from '../styles/index.style';
 import { ENTRIES1} from '../static/entries';
 import { Input, SearchBar, Icon, Button } from 'react-native-elements'
+import {
+	Body,
+	  List,
+	  ListItem,
+	  Thumbnail,
+	  Left,
+	  Right
+	} from "native-base";
+import Moment from 'moment';
 const SLIDER_1_FIRST_ITEM = 1;
-class Main extends Component {
 
+
+class Main extends Component {
+	_listData = async () => {
+		/*
+			  const queryString = this._objToQueryString({
+				    lat: this.state.location.coords.latitude,
+				    lng: this.state.location.coords.longitude,
+				    name: 'วัด',
+				});*/
+		    this.setState({refreshing: true});
+		    var headers = new Headers();
+		    headers.append("Authorization", "Basic dXNlcjp1c2Vy");
+		    return fetch(`https://ivit.azurewebsites.net/api/booking/list`,{method: "GET", headers: headers})
+		      .then((response) => response.json())
+		      .then((responseJson) => {
+
+		        this.setState({
+		          refreshing: false,
+		          dataSource: responseJson,
+		        }, function(){
+
+		        });
+
+		      })
+		      .catch((error) =>{
+		        console.error(error);
+		      });
+		  };
+		  
+		  componentDidMount(){
+		    this._listData();
+		  }
   constructor (props) {
     super(props);
     this.state = {
-        slider1ActiveSlide: SLIDER_1_FIRST_ITEM
+        slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
+        dataSource: [],
     };
 }
 
@@ -33,8 +74,6 @@ _renderItemWithParallax ({item, index}, parallaxProps) {
 
     return (
         <View style={styles.exampleContainer}>
-            <Text style={styles.title}>{`Example ${number}`}</Text>
-            <Text style={styles.subtitle}>{title}</Text>
             <Carousel
               ref={c => this._slider1Ref = c}
               data={ENTRIES1}
@@ -73,7 +112,7 @@ _renderItemWithParallax ({item, index}, parallaxProps) {
 
 render () {
     const example1 = this.mainExample(1, 'Default');
-
+    Moment.locale('th_TH');
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -89,12 +128,35 @@ render () {
                   scrollEventThrottle={200}
                   directionalLockEnabled={true}
                 >
-    <View style={[styles.headerContainer]}>
-
-
-      { example1 }
-    </View>
-                    
+                
+             <View style={[styles.headerContainer]}>
+                { example1 }
+              </View>
+              
+              
+                <List
+                dataArray={this.state.dataSource}
+                renderRow={data =>
+                  <ListItem avatar>
+                    <Left>
+                    {data.status}
+                    </Left>
+                    <Body>
+                      <Text>
+                        {data.text}
+                      </Text>
+                      <Text numberOfLines={2} note>
+                      {data.templeName} {data.objective} พระ {data.quantity} รูป 
+                        
+                      </Text>
+                    </Body>
+                    <Right>
+                      <Text note>
+                        {Moment(data.fromdate).format('d MMM hh:mm')}
+                      </Text>
+                    </Right>
+                  </ListItem>}
+              />             
                 </ScrollView>
             </View>
         </SafeAreaView>

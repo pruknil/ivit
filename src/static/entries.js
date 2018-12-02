@@ -1,32 +1,32 @@
 export const ENTRIES1 = [
     {
-        title: 'Beautiful and dramatic Antelope Canyon',
-        subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-        illustration: 'https://i.imgur.com/UYiroysl.jpg'
+        title: 'วัดพระศรีอารย์ จังหวัดราชบุรี',
+        subtitle: 'อุโบสถทองคำร้อยล้าน',
+        illustration: 'https://travel.mthai.com/app/uploads/2014/10/1.jpg'
     },
     {
-        title: 'Earlier this morning, NYC',
-        subtitle: 'Lorem ipsum dolor sit amet',
-        illustration: 'https://i.imgur.com/UPrs1EWl.jpg'
+        title: 'วัดถ้ำเขาวง จังหวัดอุทัยธานี',
+        subtitle: 'วัดไม้เก่าแก่ท่ามกลางภูเขาหินปูน',
+        illustration: 'https://travel.mthai.com/app/uploads/2014/10/2.jpg'
     },
     {
-        title: 'White Pocket Sunset',
-        subtitle: 'Lorem ipsum dolor sit amet et nuncat ',
-        illustration: 'https://i.imgur.com/MABUbpDl.jpg'
+        title: 'วัดสันป่ายางหลวง จังหวัดลำพูน',
+        subtitle: 'วัดสวยล้านนากลางป่าคอนกรีต',
+        illustration: 'https://travel.mthai.com/app/uploads/2014/10/3.jpg'
     },
     {
-        title: 'Acrocorinth, Greece',
-        subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-        illustration: 'https://i.imgur.com/KZsmUi2l.jpg'
+        title: 'พระมหาเจดีย์ชัยมงคล จังหวัดร้อยเอ็ด',
+        subtitle: 'วัดสวยเหมือนอยู่ในแดนสวรรค์',
+        illustration: 'https://travel.mthai.com/app/uploads/2014/10/4.jpg'
     },
     {
-        title: 'The lone tree, majestic landscape of New Zealand',
-        subtitle: 'Lorem ipsum dolor sit amet',
-        illustration: 'https://i.imgur.com/2nCt3Sbl.jpg'
+        title: 'วัดถ้ำเสือ จังหวัดกาญจนบุรี',
+        subtitle: 'ชมความยิ่งใหญ่ของพระพุทธรูปปางประทานพรที่ใหญ่ที่สุด',
+        illustration: 'https://travel.mthai.com/app/uploads/2014/10/5_6.jpg'
     },
     {
-        title: 'Middle Earth, Germany',
-        subtitle: 'Lorem ipsum dolor sit amet',
-        illustration: 'https://i.imgur.com/lceHsT6l.jpg'
+        title: 'วัดป่าสว่างบุญ จังหวัดสระบุรี',
+        subtitle: 'เจดีย์ทองคำ 500 ยอด',
+        illustration: 'https://travel.mthai.com/app/uploads/2014/10/6_2.jpg'
     }
 ];
