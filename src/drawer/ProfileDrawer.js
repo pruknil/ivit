@@ -15,7 +15,7 @@ SignIn: { screen: SignIn }
 );
 
 ProfileDrawerItem.navigationOptions = {
-  drawerLabel: 'Profile',
+  drawerLabel: 'ข้อมูลส่วนตัว',
   drawerIcon: ({ tintColor }) => (
     <Icon
       name="person"

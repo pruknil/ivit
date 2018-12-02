@@ -112,7 +112,6 @@ _renderItemWithParallax ({item, index}, parallaxProps) {
 
 render () {
     const example1 = this.mainExample(1, 'Default');
-    Moment.locale('th_TH');
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -152,7 +151,7 @@ render () {
                     </Body>
                     <Right>
                       <Text note>
-                        {Moment(data.fromdate).format('d MMM hh:mm')}
+                        {Moment(data.fromdate).format('MMM D','th')}
                       </Text>
                     </Right>
                   </ListItem>}
