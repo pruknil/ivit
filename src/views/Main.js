@@ -1,7 +1,7 @@
 
 
 import React, { Component } from 'react';
-import {View, ScrollView, Text, StatusBar, SafeAreaView } from 'react-native';
+import {View, ScrollView, Text, StatusBar, SafeAreaView ,RefreshControl} from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { sliderWidth, itemWidth } from '../styles/SliderEntry.style';
 import SliderEntry from '../components/SliderEntry';
@@ -51,9 +51,11 @@ class Main extends Component {
 		  componentDidMount(){
 		    this._listData();
 		  }
+		  
   constructor (props) {
     super(props);
     this.state = {
+    		refreshing: false,
         slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
         dataSource: [],
     };
@@ -126,6 +128,12 @@ render () {
                   style={styles.scrollview}
                   scrollEventThrottle={200}
                   directionalLockEnabled={true}
+    		    refreshControl={
+      		          <RefreshControl
+      		            refreshing={this.state.refreshing}
+      		            onRefresh={this._listData}
+      		          />
+      		        }
                 >
                 
              <View style={[styles.headerContainer]}>
